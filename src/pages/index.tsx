@@ -29,15 +29,19 @@ export default function Home() {
           description: 'Truyện tranh',
           title: 'Doraemon',
           price: 20_000,
+          oprice: 30000,
+          id: '123',
         })}
       ></BookCarousel>
       <BookCarousel
         title='Sách nổi bật trong tuần'
         books={Array(7).fill({
-          imgUrl: images[1],
+          imgUrl: '/images/carousel/bg1.jpg',
           description: 'Truyện tranh',
           title: 'Doraemon',
           price: 20_000,
+          oprice: 30000,
+          id: '123',
         })}
       ></BookCarousel>
     </PageWrapper>

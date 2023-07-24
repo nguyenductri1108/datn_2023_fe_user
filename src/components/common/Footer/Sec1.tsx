@@ -9,7 +9,7 @@ const Sec1: React.FC<PropsWithChildren<Props>> = () => {
       <Box display={'flex'} justifyContent={'center'}>
         <Text
           fontFamily='stylish'
-          color='pink.800'
+          color='red.500'
           fontSize='32px'
           display='flex'
           alignItems='center'

@@ -1,26 +1,22 @@
 import {
+  Avatar,
   Box,
-  Button,
+  IconButton,
   Popover,
-  PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
   Text,
-  Link,
-  SimpleGrid,
 } from '@chakra-ui/react';
-import { PropsWithChildren, forwardRef } from 'react';
-import { PhoneIcon } from '@chakra-ui/icons';
-import { addHashToUrl, scrollToId, scrollToTop } from '../../../utils/dom';
-import Router from 'next/router';
-import Autocomplete from './Autocomplete';
-import { useState } from 'react';
 import NextLink from 'next/link';
-import { InferGetServerSidePropsType } from 'next';
+import Router, { useRouter } from 'next/router';
+import { PropsWithChildren, forwardRef, useState } from 'react';
 import { categories } from '../../../constants/category';
+import { addHashToUrl } from '../../../utils/dom';
+import Autocomplete from './Autocomplete';
+
+import { PiShoppingCartDuotone } from 'react-icons/pi';
 
 interface Props {}
 
@@ -28,6 +24,7 @@ interface Props {}
 const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
   ({}, _ref) => {
     const [isSearchFocus, setIsSearchFocus] = useState(false);
+    const router = useRouter();
 
     return (
       <>
@@ -53,7 +50,7 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
             <Text
               fontSize='24px'
               fontFamily='stylish'
-              color={'pink.800'}
+              color={'red.500'}
               fontWeight={600}
               cursor='pointer'
               onClick={() => {
@@ -97,23 +94,48 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
             <Autocomplete setFocus={setIsSearchFocus}></Autocomplete>
           </Box>
 
-          <Box display='flex' alignItems='center' columnGap={2}>
-            <PhoneIcon
-              color='primary'
-              boxSize={4}
-              position='relative'
-              top='2px'
-            />
+          <Box display='flex' alignItems='center' columnGap={5}>
+            <Box
+              position={'relative'}
+              onClick={() => {
+                router.push('/cart');
+              }}
+            >
+              <IconButton
+                color={'red.500'}
+                bgColor={'white'}
+                borderRadius={'999px'}
+                size={'lg'}
+                aria-label='Xem giỏ hàng'
+                fontSize='30px'
+                icon={<PiShoppingCartDuotone />}
+              ></IconButton>
+              <Box
+                width={'20px'}
+                height={'20px'}
+                position={'absolute'}
+                top={0}
+                right={0}
+                borderRadius={'999px'}
+                backgroundColor={'red.500'}
+                display={'flex'}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <Text color={'white'}>1</Text>
+              </Box>
+            </Box>
+
+            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
             <Text
               fontSize='16px'
               fontWeight={600}
-              fontStyle='italic'
               cursor='pointer'
               onClick={() => {
                 addHashToUrl('contact');
               }}
             >
-              Liên hệ
+              Xin chào, Trí
             </Text>
           </Box>
         </Box>

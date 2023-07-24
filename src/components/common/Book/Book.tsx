@@ -3,12 +3,16 @@ import { PropsWithChildren } from 'react';
 import { useCheckMobile } from '../../../utils/hooks/useCheckMobile';
 import { ImPriceTag } from 'react-icons/im';
 import { numberWithCommas } from '../../../utils/number';
+import { useRouter } from 'next/router';
+import { getPathFromCategory } from '../../../constants/category';
+
 export interface BookProps {
   title: string;
   description: string;
   price: number;
   imgUrl: string;
   oprice?: number;
+  id?: string;
   ContainerProps?: BoxProps;
 }
 
@@ -19,8 +23,11 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
   title,
   oprice,
   imgUrl,
+  id,
 }) => {
   const isMobile = useCheckMobile();
+
+  const router = useRouter();
 
   return (
     <>
@@ -32,19 +39,24 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
         flexDirection='column'
         alignItems='center'
         bgColor='default'
-        // bgColor='white'
-        // border='1px solid #ED64A6'
+        _hover={{
+          cursor: 'pointer',
+        }}
         backdropFilter='blur(8px)'
         rowGap={3}
-        borderRadius='10px 10px 40px 10px'
+        borderRadius='10px 10px 10px 10px'
+        onClick={() => {
+          const path = getPathFromCategory(description);
+          router.push(`/category/${path}/id`);
+        }}
         {...ContainerProps}
       >
         <img
           style={{
             height: '200px',
             width: '100%',
-            objectFit: 'cover',
-            borderRadius: '10px 10px 40px 10px',
+            objectFit: 'contain',
+            borderRadius: '10px 10px 10px 10px',
           }}
           src={imgUrl}
         />
@@ -70,7 +82,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
         </Box>
         <Box>
           <Text fontFamily='stylish' fontSize='18px' justifyContent='center'>
-            {numberWithCommas(price)}
+            {numberWithCommas(price)}đ
           </Text>
           {!!oprice && (
             <Text
@@ -80,7 +92,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
               fontStyle='italic'
               fontWeight={600}
             >
-              {numberWithCommas(oprice)}
+              {numberWithCommas(oprice)}đ
             </Text>
           )}
         </Box>

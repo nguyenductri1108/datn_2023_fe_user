@@ -1,17 +1,10 @@
-import {
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Select,
-  SimpleGrid,
-} from '@chakra-ui/react';
-import PageWrapper from '../../components/common/Wrapper/PageWrapper';
+import { Box, Select, SimpleGrid } from '@chakra-ui/react';
+import { useState } from 'react';
+import Book from '../../components/common/Book/Book';
 import BreadCrumbFC from '../../components/common/BreadCrumb';
-import { useEffect, useState } from 'react';
+import PageWrapper from '../../components/common/Wrapper/PageWrapper';
 import SideBarCategory from '../../components/pages/Category/SideBar';
 import { categories } from '../../constants/category';
-import Book from '../../components/common/Book/Book';
 
 const Category = () => {
   const [sortOptions, setSortOptions] = useState<SORT_OPTIONS | string>(
@@ -71,7 +64,7 @@ const Category = () => {
                 price: 20_000,
               })
               .map((item, index) => {
-                return <Book {...item}></Book>;
+                return <Book key={index} {...item}></Book>;
               })}
           </SimpleGrid>
         </Box>
@@ -80,7 +73,7 @@ const Category = () => {
   );
 };
 
-enum SORT_OPTIONS {
+export enum SORT_OPTIONS {
   MOST_COMMON,
   MOST_DISCOUNT,
 }

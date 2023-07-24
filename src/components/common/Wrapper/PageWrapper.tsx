@@ -17,7 +17,12 @@ const PageWrapper: React.FC<PropsWithChildren<Props>> = ({
         <title>{title}</title>
         <link rel='icon' href={iconUrl} />
       </Head>
-      <Box display='flex' flexDirection='column' alignItems='center'>
+      <Box
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        padding={'12px'}
+      >
         <Box width='100%' maxWidth='1200px'>
           {children}
         </Box>
