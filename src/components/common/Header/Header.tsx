@@ -17,6 +17,7 @@ import { addHashToUrl } from '../../../utils/dom';
 import Autocomplete from './Autocomplete';
 
 import { PiShoppingCartDuotone } from 'react-icons/pi';
+import Link from 'next/link';
 
 interface Props {}
 
@@ -24,6 +25,7 @@ interface Props {}
 const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
   ({}, _ref) => {
     const [isSearchFocus, setIsSearchFocus] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const router = useRouter();
 
     return (
@@ -94,50 +96,63 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
             <Autocomplete setFocus={setIsSearchFocus}></Autocomplete>
           </Box>
 
-          <Box display='flex' alignItems='center' columnGap={5}>
-            <Box
-              position={'relative'}
-              onClick={() => {
-                router.push('/cart');
-              }}
-            >
-              <IconButton
-                color={'red.500'}
-                bgColor={'white'}
-                borderRadius={'999px'}
-                size={'lg'}
-                aria-label='Xem giỏ hàng'
-                fontSize='30px'
-                icon={<PiShoppingCartDuotone />}
-              ></IconButton>
-              <Box
-                width={'20px'}
-                height={'20px'}
-                position={'absolute'}
-                top={0}
-                right={0}
-                borderRadius={'999px'}
-                backgroundColor={'red.500'}
-                display={'flex'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <Text color={'white'}>1</Text>
-              </Box>
+          {!isLogin ? (
+            <Box display={'flex'} columnGap={'24px'}>
+              <Link href={'/signin'}>
+                <Text textDecoration={'underline'} fontWeight={'600'}>
+                  Login
+                </Text>
+              </Link>
+              <Link href={'/signup'}>
+                <Text textDecoration={'underline'}>Sign up</Text>
+              </Link>
             </Box>
+          ) : (
+            <Box display='flex' alignItems='center' columnGap={5}>
+              <Box
+                position={'relative'}
+                onClick={() => {
+                  router.push('/cart');
+                }}
+              >
+                <IconButton
+                  color={'red.500'}
+                  bgColor={'white'}
+                  borderRadius={'999px'}
+                  size={'lg'}
+                  aria-label='Xem giỏ hàng'
+                  fontSize='30px'
+                  icon={<PiShoppingCartDuotone />}
+                ></IconButton>
+                <Box
+                  width={'20px'}
+                  height={'20px'}
+                  position={'absolute'}
+                  top={0}
+                  right={0}
+                  borderRadius={'999px'}
+                  backgroundColor={'red.500'}
+                  display={'flex'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <Text color={'white'}>1</Text>
+                </Box>
+              </Box>
 
-            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
-            <Text
-              fontSize='16px'
-              fontWeight={600}
-              cursor='pointer'
-              onClick={() => {
-                addHashToUrl('contact');
-              }}
-            >
-              Xin chào, Trí
-            </Text>
-          </Box>
+              <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+              <Text
+                fontSize='16px'
+                fontWeight={600}
+                cursor='pointer'
+                onClick={() => {
+                  addHashToUrl('contact');
+                }}
+              >
+                Xin chào, Trí
+              </Text>
+            </Box>
+          )}
         </Box>
       </>
     );
