@@ -1,13 +1,22 @@
 import {
   Avatar,
   Box,
+  Button,
   IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import Router, { useRouter } from 'next/router';
@@ -18,8 +27,133 @@ import Autocomplete from './Autocomplete';
 
 import { PiShoppingCartDuotone } from 'react-icons/pi';
 import Link from 'next/link';
+import { FormikProvider, useFormik } from 'formik';
+import FormikControl from '../Formik/FormikControl';
 
 interface Props {}
+
+interface ButtonLinkProps {
+  label: string;
+  fontweight?: any;
+}
+
+type formErrorSignIn = {
+  username?: string;
+  password?: string;
+};
+
+type signInValue = {
+  username: string;
+  password: string;
+};
+
+const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const validate = (values: signInValue) => {
+    const errors: formErrorSignIn = {};
+    if (!values.username) {
+      errors.username = 'Required';
+    }
+
+    if (!values.password) {
+      errors.password = 'Required';
+    }
+
+    return errors;
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    onSubmit: value => {
+      console.log(value);
+    },
+    validate,
+  });
+
+  return (
+    <Button backgroundColor={'#ffffffb3'} onClick={onOpen}>
+      <Text textDecoration={'underline'} fontWeight={fontweight}>
+        {label}
+      </Text>
+
+      {label === 'Sign Up' ? (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Đăng ký</ModalHeader>
+            <ModalCloseButton />
+            <Box p={6}>
+              <FormikProvider value={formik}>
+                <form onSubmit={formik.handleSubmit}>
+                  <ModalBody>
+                    <FormikControl
+                      control='input'
+                      type='text'
+                      name='username'
+                      label='Tài khoản'
+                    ></FormikControl>
+
+                    <FormikControl
+                      control='input'
+                      type='password'
+                      name='password'
+                      label='Password'
+                    ></FormikControl>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme='blue' mr={3} type='submit'>
+                      Đăng ký
+                    </Button>
+                  </ModalFooter>
+                </form>
+              </FormikProvider>
+            </Box>
+          </ModalContent>
+        </Modal>
+      ) : (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Đăng nhập</ModalHeader>
+            <ModalCloseButton />
+            <Box p={6}>
+              <FormikProvider value={formik}>
+                <form onSubmit={formik.handleSubmit}>
+                  <ModalBody>
+                    <FormikControl
+                      control='input'
+                      type='text'
+                      name='username'
+                      label='Tài khoản'
+                    ></FormikControl>
+
+                    <FormikControl
+                      control='input'
+                      type='text'
+                      name='password'
+                      label='Password'
+                    ></FormikControl>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme='blue' mr={3} type='submit'>
+                      Đăng Nhập
+                    </Button>
+                  </ModalFooter>
+                </form>
+              </FormikProvider>
+            </Box>
+          </ModalContent>
+        </Modal>
+      )}
+    </Button>
+  );
+};
 
 // eslint-disable-next-line react/display-name
 const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
@@ -98,14 +232,8 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
 
           {!isLogin ? (
             <Box display={'flex'} columnGap={'24px'}>
-              <Link href={'/signin'}>
-                <Text textDecoration={'underline'} fontWeight={'600'}>
-                  Login
-                </Text>
-              </Link>
-              <Link href={'/signup'}>
-                <Text textDecoration={'underline'}>Sign up</Text>
-              </Link>
+              <ButtonLink label='Sign In' />
+              <ButtonLink label='Sign Up' />
             </Box>
           ) : (
             <Box display='flex' alignItems='center' columnGap={5}>

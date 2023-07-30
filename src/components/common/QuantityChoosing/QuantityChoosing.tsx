@@ -2,12 +2,13 @@ import { Box, BoxProps, Button, Input } from '@chakra-ui/react';
 import { PropsWithChildren, forwardRef, useState } from 'react';
 interface PropsQuantityChildren {
   ContainerProps?: BoxProps;
+  setState: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const QuantityChoosing = forwardRef<
   HTMLInputElement,
   PropsWithChildren<PropsQuantityChildren>
->(({ ContainerProps }, _ref) => {
+>(({ ContainerProps, setState }, _ref) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   return (
@@ -15,7 +16,11 @@ const QuantityChoosing = forwardRef<
       <Button
         flex={1}
         onClick={() => {
-          if (quantity > 1) setQuantity(prev => prev - 1);
+          if (quantity > 1)
+            setQuantity(prev => {
+              setState(prev - 1);
+              return prev - 1;
+            });
         }}
       >
         -
@@ -34,7 +39,10 @@ const QuantityChoosing = forwardRef<
       <Button
         flex={1}
         onClick={() => {
-          setQuantity(prev => prev + 1);
+          setQuantity(prev => {
+            setState(prev + 1);
+            return prev + 1;
+          });
         }}
       >
         +

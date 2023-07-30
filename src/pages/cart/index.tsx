@@ -17,14 +17,18 @@ import StepperFC from '../../components/common/Stepper/Stepper';
 import PageWrapper from '../../components/common/Wrapper/PageWrapper';
 
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import QuantityChoosing from '../../components/common/QuantityChoosing/QuantityChoosing';
 import { numberWithCommas } from '../../utils/number';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { addItemData, removeItemData } from '../../redux/reducers/cartSlice';
 
 const Cart = () => {
   const [cartItemChoosing, setCartItemChoosing] = useState<string[]>([]);
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const [cartItems, setCartItems] = useState([
     {
@@ -52,6 +56,8 @@ const Cart = () => {
       id: '3',
     },
   ]);
+
+  useEffect(() => {}, [cartItemChoosing]);
 
   return (
     <PageWrapper>
@@ -100,23 +106,7 @@ const Cart = () => {
             >
               <Tbody>
                 {cartItems.map((item, index) => {
-                  return (
-                    <Tr key={index}>
-                      <Td>
-                        <Checkbox value={item.id}></Checkbox>
-                      </Td>
-                      <Th>
-                        <Image src={item.imgUrl} height={'50px'}></Image>
-                      </Th>
-                      <Td>{item.title}</Td>
-                      <Td display={'flex'} justifyContent={'center'}>
-                        <QuantityChoosing
-                          ContainerProps={{ width: '130px' }}
-                        ></QuantityChoosing>
-                      </Td>
-                      <Td>{numberWithCommas(20000)}đ</Td>
-                    </Tr>
-                  );
+                  return <CartItemRow data={item} key={index} />;
                 })}
               </Tbody>
             </CheckboxGroup>
@@ -154,3 +144,51 @@ const Cart = () => {
 };
 
 export default Cart;
+
+interface CartItemRowProps {
+  data: {
+    id: string;
+    imgUrl: string;
+    title: string;
+    price: number;
+  };
+}
+
+const CartItemRow: React.FC<CartItemRowProps> = ({ data }) => {
+  const [quantity, setQuantity] = useState<number>(1);
+  useEffect(() => {}, [quantity]);
+
+  const dispatch = useDispatch();
+
+  return (
+    <Tr>
+      <Td>
+        <Checkbox
+          onChange={e => {
+            if (e.target.checked) {
+              dispatch(
+                addItemData({
+                  id: data.id,
+                  price: data.price,
+                  quantity: quantity,
+                }),
+              );
+            } else dispatch(removeItemData(data.id));
+          }}
+          value={data.id}
+        ></Checkbox>
+      </Td>
+      <Th>
+        <Image src={data.imgUrl} height={'50px'}></Image>
+      </Th>
+      <Td>{data.title}</Td>
+      <Td display={'flex'} justifyContent={'center'}>
+        <QuantityChoosing
+          setState={setQuantity}
+          ContainerProps={{ width: '130px' }}
+        ></QuantityChoosing>
+      </Td>
+      <Td>{numberWithCommas(20000)}đ</Td>
+    </Tr>
+  );
+};

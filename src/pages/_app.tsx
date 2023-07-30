@@ -4,14 +4,18 @@ import { AppProps } from 'next/app';
 import AppWrapper from '../components/common/Wrapper/AppWrapper';
 import theme from '../themes/theme';
 import '@fontsource/nunito';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <AppWrapper>
-        <Component {...pageProps} />
-      </AppWrapper>
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider theme={theme}>
+        <AppWrapper>
+          <Component {...pageProps} />
+        </AppWrapper>
+      </ChakraProvider>
+    </Provider>
   );
 }
 
