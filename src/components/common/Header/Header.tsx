@@ -29,12 +29,15 @@ import { PiShoppingCartDuotone } from 'react-icons/pi';
 import Link from 'next/link';
 import { FormikProvider, useFormik } from 'formik';
 import FormikControl from '../Formik/FormikControl';
+import { axiosPost } from '../../../services';
+import { toast } from 'react-toastify';
 
 interface Props {}
 
 interface ButtonLinkProps {
   label: string;
   fontweight?: any;
+  setLogIn?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type formErrorSignIn = {
@@ -47,7 +50,7 @@ type signInValue = {
   password: string;
 };
 
-const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
+const ButtonLinkSignUp: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const validate = (values: signInValue) => {
@@ -68,8 +71,17 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
       username: '',
       password: '',
     },
-    onSubmit: value => {
-      console.log(value);
+    onSubmit: (value, { resetForm }) => {
+      axiosPost('auth/register', value)
+        .then(res => {
+          toast.success('Đăng kí thành công');
+          resetForm();
+          onClose();
+        })
+        .catch(error => {
+          toast.error(error.response.data.message);
+          console.log(error.response.data.message);
+        });
     },
     validate,
   });
@@ -80,7 +92,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
         {label}
       </Text>
 
-      {label === 'Sign Up' ? (
+      {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -115,7 +127,59 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
             </Box>
           </ModalContent>
         </Modal>
-      ) : (
+      }
+    </Button>
+  );
+};
+
+const ButtonLinkSignIn: React.FC<ButtonLinkProps> = ({
+  label,
+  fontweight,
+  setLogIn,
+}) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const validate = (values: signInValue) => {
+    const errors: formErrorSignIn = {};
+    if (!values.username) {
+      errors.username = 'Required';
+    }
+
+    if (!values.password) {
+      errors.password = 'Required';
+    }
+
+    return errors;
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    onSubmit: (value, { resetForm }) => {
+      axiosPost('auth/login', value)
+        .then((res: any) => {
+          toast.success('Đăng nhập thành công');
+          if (setLogIn) setLogIn(true);
+          localStorage.setItem('accessToken', res.data.accessToken);
+          onClose();
+        })
+        .catch(error => {
+          console.log(error);
+          toast.error(error.response?.data?.message);
+        });
+    },
+    validate,
+  });
+
+  return (
+    <Button backgroundColor={'#ffffffb3'} onClick={onOpen}>
+      <Text textDecoration={'underline'} fontWeight={fontweight}>
+        {label}
+      </Text>
+
+      {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
@@ -134,7 +198,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
 
                     <FormikControl
                       control='input'
-                      type='text'
+                      type='password'
                       name='password'
                       label='Password'
                     ></FormikControl>
@@ -142,7 +206,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
 
                   <ModalFooter>
                     <Button colorScheme='blue' mr={3} type='submit'>
-                      Đăng Nhập
+                      Đăng nhập
                     </Button>
                   </ModalFooter>
                 </form>
@@ -150,7 +214,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
             </Box>
           </ModalContent>
         </Modal>
-      )}
+      }
     </Button>
   );
 };
@@ -232,8 +296,8 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
 
           {!isLogin ? (
             <Box display={'flex'} columnGap={'24px'}>
-              <ButtonLink label='Sign In' />
-              <ButtonLink label='Sign Up' />
+              <ButtonLinkSignIn setLogIn={setIsLogin} label='Sign In' />
+              <ButtonLinkSignUp label='Sign Up' />
             </Box>
           ) : (
             <Box display='flex' alignItems='center' columnGap={5}>
