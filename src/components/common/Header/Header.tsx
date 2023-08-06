@@ -3,6 +3,10 @@ import {
   Box,
   Button,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -332,17 +336,33 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
                 </Box>
               </Box>
 
-              <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
-              <Text
-                fontSize='16px'
-                fontWeight={600}
-                cursor='pointer'
-                onClick={() => {
-                  addHashToUrl('contact');
-                }}
-              >
-                Xin chào, Trí
-              </Text>
+              <Menu>
+                <MenuButton>
+                  <Box display={'flex'} alignItems={'center'} columnGap={3}>
+                    <Avatar
+                      name='Dan Abrahmov'
+                      src='https://bit.ly/dan-abramov'
+                    />
+                    <Text
+                      fontSize='16px'
+                      fontWeight={600}
+                      cursor='pointer'
+                      onClick={() => {
+                        addHashToUrl('contact');
+                      }}
+                    >
+                      Xin chào, Trí
+                    </Text>
+                  </Box>
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>Download</MenuItem>
+                  <MenuItem>Create a Copy</MenuItem>
+                  <MenuItem>Mark as Draft</MenuItem>
+                  <MenuItem>Delete</MenuItem>
+                  <MenuItem>Attend a Workshop</MenuItem>
+                </MenuList>
+              </Menu>
             </Box>
           )}
         </Box>
