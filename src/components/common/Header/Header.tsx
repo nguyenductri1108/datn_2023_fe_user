@@ -34,15 +34,17 @@ import { PiShoppingCartDuotone } from 'react-icons/pi';
 import Link from 'next/link';
 import { FormikProvider, useFormik } from 'formik';
 import FormikControl from '../Formik/FormikControl';
-import { axiosPost } from '../../../services';
+import { axiosGet, axiosPost } from '../../../services';
 import { toast } from 'react-toastify';
+import { useAppSelector } from '../../../redux/hooks';
+import { useDispatch } from 'react-redux';
+import { saveDataUser } from '../../../redux/reducers/userSlice';
 
 interface Props {}
 
 interface ButtonLinkProps {
   label: string;
   fontweight?: any;
-  setLogIn?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type formErrorSignIn = {
@@ -137,12 +139,20 @@ const ButtonLinkSignUp: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
   );
 };
 
-const ButtonLinkSignIn: React.FC<ButtonLinkProps> = ({
-  label,
-  fontweight,
-  setLogIn,
-}) => {
+const ButtonLinkSignIn: React.FC<ButtonLinkProps> = ({ label, fontweight }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const dispatch = useDispatch();
+
+  const getDataUser = async (res: any) => {
+    const saveToken = await localStorage.setItem(
+      'accessToken',
+      res.data.data.access_token,
+    );
+    const result = await axiosGet('auth/user');
+    console.log(result);
+    dispatch(saveDataUser(result.data));
+  };
 
   const validate = (values: signInValue) => {
     const errors: formErrorSignIn = {};
@@ -166,8 +176,7 @@ const ButtonLinkSignIn: React.FC<ButtonLinkProps> = ({
       axiosPost('auth/login', value)
         .then((res: any) => {
           toast.success('Đăng nhập thành công');
-          if (setLogIn) setLogIn(true);
-          localStorage.setItem('accessToken', res.data.accessToken);
+          getDataUser(res);
           onClose();
         })
         .catch(error => {
@@ -228,8 +237,9 @@ const ButtonLinkSignIn: React.FC<ButtonLinkProps> = ({
 const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
   ({}, _ref) => {
     const [isSearchFocus, setIsSearchFocus] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
     const router = useRouter();
+
+    const { dataUser } = useAppSelector(state => state.userData);
 
     return (
       <>
@@ -299,9 +309,9 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
             <Autocomplete setFocus={setIsSearchFocus}></Autocomplete>
           </Box>
 
-          {!isLogin ? (
+          {!dataUser ? (
             <Box display={'flex'} columnGap={'24px'}>
-              <ButtonLinkSignIn setLogIn={setIsLogin} label='Sign In' />
+              <ButtonLinkSignIn label='Sign In' />
               <ButtonLinkSignUp label='Sign Up' />
             </Box>
           ) : (
@@ -352,7 +362,7 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
                         addHashToUrl('contact');
                       }}
                     >
-                      Xin chào, Trí
+                      Xin chào, {dataUser.username}
                     </Text>
                   </Box>
                 </MenuButton>

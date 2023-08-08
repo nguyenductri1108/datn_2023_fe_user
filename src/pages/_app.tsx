@@ -8,16 +8,19 @@ import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CheckUser from '../components/important/checkUser';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Provider store={store}>
-        <ChakraProvider theme={theme}>
-          <AppWrapper>
-            <Component {...pageProps} />
-          </AppWrapper>
-        </ChakraProvider>
+        <CheckUser>
+          <ChakraProvider theme={theme}>
+            <AppWrapper>
+              <Component {...pageProps} />
+            </AppWrapper>
+          </ChakraProvider>
+        </CheckUser>
       </Provider>
       <ToastContainer />
     </>

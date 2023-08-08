@@ -8,7 +8,7 @@ export const axiosGet = (path = '', params = {}) => {
     .get(`${BE_ENDPOINT}/${path}`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     })
     .then(response => response.data);
@@ -16,17 +16,13 @@ export const axiosGet = (path = '', params = {}) => {
 };
 
 export const axiosPost = (path = '', body = {}, uploadFunc = () => {}) => {
-  let result = axios
-    .post(`${BE_ENDPOINT}/${path}`, body, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        // "Content-Type": "application/json"
-      },
-      onUploadProgress: uploadFunc,
-    })
-    .then(response => {
-      console.log(response);
-    });
+  let result = axios.post(`${BE_ENDPOINT}/${path}`, body, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      // "Content-Type": "application/json"
+    },
+    onUploadProgress: uploadFunc,
+  });
 
   return result;
 };

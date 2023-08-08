@@ -5,17 +5,21 @@ import type { RootState } from '../store';
 interface dataUser {}
 
 const initialState: dataUser | any = {
-  data: [],
+  dataUser: null,
   totalMoney: 0,
 };
 
 export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    saveDataUser: (state, action) => {
+      state.dataUser = action.payload;
+    },
+  },
 });
 
-export const {} = userSlice.actions;
+export const { saveDataUser } = userSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const dataCartHolding = (state: RootState) => state.cartData.data;
