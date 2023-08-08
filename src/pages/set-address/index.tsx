@@ -17,6 +17,7 @@ type formErorrType = {
   ward?: string;
   district?: string;
   province?: string;
+  detailAddress?: string;
 };
 
 type formValue = {
@@ -27,6 +28,7 @@ type formValue = {
   ward: string;
   district: string;
   province: string;
+  detailAddress: string;
 };
 
 const SetAddress: React.FC<PropsWithChildren<Props>> = ({}) => {
@@ -36,8 +38,8 @@ const SetAddress: React.FC<PropsWithChildren<Props>> = ({}) => {
     const errors: formErorrType = {};
     if (!values.username) {
       errors.username = 'Required';
-    } else if (values.username.length > 15) {
-      errors.username = 'Must be 15 characters or less';
+    } else if (values.username.length > 35) {
+      errors.username = 'Must be 35 characters or less';
     }
 
     if (!values.email) {
@@ -54,6 +56,10 @@ const SetAddress: React.FC<PropsWithChildren<Props>> = ({}) => {
       errors.phoneNumber = 'Wrong Format';
     }
 
+    if (!values.detailAddress) {
+      errors.detailAddress = 'Required';
+    }
+
     return errors;
   };
 
@@ -66,6 +72,7 @@ const SetAddress: React.FC<PropsWithChildren<Props>> = ({}) => {
       ward: '',
       district: '',
       province: '',
+      detailAddress: '',
     },
     onSubmit: value => {
       console.log(value);
@@ -164,6 +171,15 @@ const SetAddress: React.FC<PropsWithChildren<Props>> = ({}) => {
                     type='text'
                     name='province'
                     label='Tỉnh/Thành phố'
+                  ></FormikControl>
+                </Box>
+
+                <Box flexBasis={'49%'}>
+                  <FormikControl
+                    control='input'
+                    type='text'
+                    name='detailAddress'
+                    label='Địa chỉ cụ thể'
                   ></FormikControl>
                 </Box>
               </Box>

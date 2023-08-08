@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Divider,
   IconButton,
   Menu,
   MenuButton,
@@ -356,11 +357,10 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
                   </Box>
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Download</MenuItem>
-                  <MenuItem>Create a Copy</MenuItem>
-                  <MenuItem>Mark as Draft</MenuItem>
-                  <MenuItem>Delete</MenuItem>
-                  <MenuItem>Attend a Workshop</MenuItem>
+                  <MenuItem>Đơn hàng của tôi</MenuItem>
+                  <MenuItem>Cài đặt địa chỉ</MenuItem>
+                  <Divider></Divider>
+                  <MenuItem>Đăng xuất</MenuItem>
                 </MenuList>
               </Menu>
             </Box>
