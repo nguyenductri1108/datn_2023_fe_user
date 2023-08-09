@@ -2,17 +2,41 @@ import { PropsWithChildren } from 'react';
 import Book, { BookProps } from '../../common/Book/Book';
 import Carousel from '../../common/Carousel/Carousel';
 import { CustomNavigatorProps } from '../../common/Carousel/types';
-import { Box } from '@chakra-ui/react';
+import { Box, Divider } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import TitleCarousel from './TitleCarousel';
+import { useRouter } from 'next/router';
 interface Props {
   title: string;
   books: BookProps[];
+  imgTitle: string;
+  link: string;
 }
 
-const BookCarousel: React.FC<PropsWithChildren<Props>> = ({ books, title }) => {
+const BookCarousel: React.FC<PropsWithChildren<Props>> = ({
+  books,
+  title,
+  imgTitle,
+  link,
+}) => {
+  const router = useRouter();
+
   return (
     <>
+      <Divider></Divider>
+      <Box
+        onClick={() => {
+          router.push(link);
+        }}
+        style={{
+          marginTop: '32px',
+          maxHeight: '100px',
+          objectFit: 'contain',
+          cursor: 'pointer',
+        }}
+      >
+        <img src={imgTitle}></img>
+      </Box>
       <Box display='flex' justifyContent='center' mt={5}>
         <TitleCarousel title={title} />
       </Box>
