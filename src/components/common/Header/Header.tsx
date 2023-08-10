@@ -28,7 +28,7 @@ import Router, { useRouter } from 'next/router';
 import { PropsWithChildren, forwardRef, useState } from 'react';
 import { categories } from '../../../constants/category';
 import { addHashToUrl } from '../../../utils/dom';
-import Autocomplete from './Autocomplete';
+import InputSearch from './InputSearch';
 
 import { PiShoppingCartDuotone } from 'react-icons/pi';
 import Link from 'next/link';
@@ -306,7 +306,10 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
             flexGrow={isSearchFocus ? 1 : 0}
             maxWidth={'500px'}
           >
-            <Autocomplete setFocus={setIsSearchFocus}></Autocomplete>
+            <InputSearch
+              isSearchFocus={isSearchFocus}
+              setFocus={setIsSearchFocus}
+            ></InputSearch>
           </Box>
 
           {!dataUser ? (

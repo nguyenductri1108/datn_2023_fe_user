@@ -26,6 +26,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
   name,
   discount,
   imageSrc,
+  author,
   _id,
 }) => {
   const isMobile = useCheckMobile();
@@ -80,7 +81,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
             textAlign='center'
             fontFamily='stylish'
           >
-            {name}
+            {author}
           </Text>
         </Box>
         <Box>

@@ -1,11 +1,16 @@
 const BE_ENDPOINT = 'http://localhost:1108/api';
 
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify';
 
-export const axiosGet = (path = '', params = {}) => {
+export const axiosGet = (
+  path = '',
+  params = {},
+  customConfig: AxiosRequestConfig = {},
+) => {
   let result = axios
     .get(`${BE_ENDPOINT}/${path}`, {
+      ...customConfig,
       params: params,
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -15,8 +20,14 @@ export const axiosGet = (path = '', params = {}) => {
   return result;
 };
 
-export const axiosPost = (path = '', body = {}, uploadFunc = () => {}) => {
+export const axiosPost = (
+  path = '',
+  body = {},
+  customConfig = {},
+  uploadFunc = () => {},
+) => {
   let result = axios.post(`${BE_ENDPOINT}/${path}`, body, {
+    ...customConfig,
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       // "Content-Type": "application/json"
