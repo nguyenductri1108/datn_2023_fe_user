@@ -7,23 +7,26 @@ import { useRouter } from 'next/router';
 import { getPathFromCategory } from '../../../constants/category';
 
 export interface BookProps {
-  title: string;
+  name: string;
   description: string;
   price: number;
-  imgUrl: string;
-  oprice?: number;
-  id?: string;
+  imageSrc: string[];
+  discount: number;
+  _id: string;
+  commonPoint: number;
   ContainerProps?: BoxProps;
+  type: string;
+  author: string;
 }
 
 const Book: React.FC<PropsWithChildren<BookProps>> = ({
   ContainerProps,
   description,
   price,
-  title,
-  oprice,
-  imgUrl,
-  id,
+  name,
+  discount,
+  imageSrc,
+  _id,
 }) => {
   const isMobile = useCheckMobile();
 
@@ -58,7 +61,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
             objectFit: 'contain',
             borderRadius: '10px 10px 10px 10px',
           }}
-          src={imgUrl}
+          src={imageSrc ? imageSrc[0] : 'images/anhDa/bg1.jpg'}
         />
         <Text
           color='primary'
@@ -67,7 +70,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
           textAlign='center'
           fontFamily='stylish'
         >
-          {title}
+          {name}
         </Text>
         <Box px='20px'>
           <Text
@@ -77,14 +80,17 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
             textAlign='center'
             fontFamily='stylish'
           >
-            {description}
+            {name}
           </Text>
         </Box>
         <Box>
           <Text fontFamily='stylish' fontSize='18px' justifyContent='center'>
-            {numberWithCommas(price)}đ
+            {numberWithCommas(
+              Math.floor(price * (discount ? 100 - discount : 1)),
+            )}
+            đ
           </Text>
-          {!!oprice && (
+          {!!discount && (
             <Text
               textDecoration='line-through'
               fontSize='12px'
@@ -92,7 +98,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
               fontStyle='italic'
               fontWeight={600}
             >
-              {numberWithCommas(oprice)}đ
+              {numberWithCommas(price)}đ
             </Text>
           )}
         </Box>
