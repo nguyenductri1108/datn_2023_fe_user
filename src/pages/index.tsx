@@ -1,5 +1,5 @@
 import { Box, useMediaQuery } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import PageWrapper from '../components/common/Wrapper/PageWrapper';
 import Banner from '../components/pages/Home/Banner';
 import BookCarousel from '../components/pages/Home/BookCarousel';
@@ -11,7 +11,9 @@ import { axiosGet } from '../services';
 export default function Home() {
   const isMobile = useCheckMobile();
   const [isLargerThanBanner] = useMediaQuery('(min-width: 1220px)');
-  const [commonBooks, setCommonBooks] = useState([]);
+  const [commonBooks, setCommonBooks] = useState<Array<any>>([]);
+  const [comicBooks, setComicBooks] = useState<Array<any>>([]);
+  const [novelBooks, setNovelBooks] = useState<Array<any>>([]);
 
   const getCommonBooks = async () => {
     const res = await axiosGet('books');
@@ -20,8 +22,22 @@ export default function Home() {
     }
   };
 
+  const getBooksByCategory = async (
+    category: string,
+    setData: Dispatch<SetStateAction<any[]>>,
+  ) => {
+    const res = await axiosGet('books/getbooks', {
+      category,
+    });
+    if (res.data) {
+      setData(res.data);
+    }
+  };
+
   useEffect(() => {
     getCommonBooks();
+    getBooksByCategory('truyentranh', setComicBooks);
+    getBooksByCategory('tieuthuyet', setNovelBooks);
   }, []);
 
   const [images, setImages] = useState([
@@ -46,27 +62,13 @@ export default function Home() {
         imgTitle='/images/category/truyentranh.jpg'
         link='/category/truyentranh'
         title='Thế giới truyện tranh'
-        books={Array(7).fill({
-          imgUrl: '/images/carousel/bg1.jpg',
-          description: 'Truyện tranh',
-          title: 'Doraemon',
-          price: 20_000,
-          oprice: 30000,
-          id: '123',
-        })}
+        books={comicBooks}
       ></BookCarousel>
       <BookCarousel
         imgTitle='/images/category/tieuthuyet.jpg'
         link='/category/tieuthuyet'
         title='Những tiểu thuyết nên đọc'
-        books={Array(7).fill({
-          imgUrl: '/images/carousel/bg1.jpg',
-          description: 'Truyện tranh',
-          title: 'Doraemon',
-          price: 20_000,
-          oprice: 30000,
-          id: '123',
-        })}
+        books={novelBooks}
       ></BookCarousel>
     </PageWrapper>
   );

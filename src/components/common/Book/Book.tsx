@@ -36,6 +36,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
   return (
     <>
       <Box
+        minHeight={'360px'}
         width={isMobile ? '275px' : '360px'}
         maxWidth='100%'
         p='15px'
@@ -87,7 +88,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
         <Box>
           <Text fontFamily='stylish' fontSize='18px' justifyContent='center'>
             {numberWithCommas(
-              Math.floor(price * (discount ? 100 - discount : 1)),
+              Math.floor(price * (discount ? (100 - discount) / 100 : 1)),
             )}
             đ
           </Text>
