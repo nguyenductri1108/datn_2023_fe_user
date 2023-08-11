@@ -3,12 +3,13 @@ import { PropsWithChildren, forwardRef, useState } from 'react';
 interface PropsQuantityChildren {
   ContainerProps?: BoxProps;
   setState: React.Dispatch<React.SetStateAction<number>>;
+  limit: number;
 }
 
 const QuantityChoosing = forwardRef<
   HTMLInputElement,
   PropsWithChildren<PropsQuantityChildren>
->(({ ContainerProps, setState }, _ref) => {
+>(({ ContainerProps, setState, limit }, _ref) => {
   const [quantity, setQuantity] = useState<number>(1);
 
   return (
@@ -22,6 +23,7 @@ const QuantityChoosing = forwardRef<
               return prev - 1;
             });
         }}
+        isDisabled={quantity <= 1}
       >
         -
       </Button>
@@ -44,6 +46,7 @@ const QuantityChoosing = forwardRef<
             return prev + 1;
           });
         }}
+        isDisabled={quantity >= limit}
       >
         +
       </Button>

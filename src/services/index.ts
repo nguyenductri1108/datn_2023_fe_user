@@ -37,3 +37,20 @@ export const axiosPost = (
 
   return result;
 };
+
+export const axiosDelete = (
+  path = '',
+  customConfig = {},
+  uploadFunc = () => {},
+) => {
+  let result = axios.delete(`${BE_ENDPOINT}/${path}`, {
+    ...customConfig,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      // "Content-Type": "application/json"
+    },
+    onUploadProgress: uploadFunc,
+  });
+
+  return result;
+};

@@ -17,21 +17,25 @@ interface Props {
   imgArr: Array<string>;
 }
 
-const ModalImg: React.FC<PropsWithChildren<Props>> = ({ isOpen, onClose }) => {
+const ModalImg: React.FC<PropsWithChildren<Props>> = ({
+  isOpen,
+  onClose,
+  imgArr,
+}) => {
   const [showingIndexImage, setShowingIndexImage] = useState<number>(0);
 
-  const [images, setImages] = useState([
-    '/images/anhDa/SachTriThuc/lckt1.jpg',
-    '/images/anhDa/SachTriThuc/dnt2.jpg',
-    '/images/anhDa/SachTriThuc/dnt1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-    '/images/carousel/bg1.jpg',
-  ]);
+  // const [images, setImages] = useState([
+  //   '/images/anhDa/SachTriThuc/lckt1.jpg',
+  //   '/images/anhDa/SachTriThuc/dnt2.jpg',
+  //   '/images/anhDa/SachTriThuc/dnt1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  //   '/images/carousel/bg1.jpg',
+  // ]);
 
   const IndexShow = 3;
 
@@ -39,7 +43,7 @@ const ModalImg: React.FC<PropsWithChildren<Props>> = ({ isOpen, onClose }) => {
     <Modal size={'3xl'} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent height={'500px'}>
-        <ModalHeader>Ảnh ({images.length})</ModalHeader>
+        <ModalHeader>Ảnh ({imgArr.length})</ModalHeader>
         <ModalCloseButton />
         <ModalBody
           mt={4}
@@ -55,7 +59,7 @@ const ModalImg: React.FC<PropsWithChildren<Props>> = ({ isOpen, onClose }) => {
             height={'400px'}
           >
             <Image
-              src={images[showingIndexImage]}
+              src={imgArr[showingIndexImage]}
               objectFit={'contain'}
               maxWidth={'100%'}
             ></Image>
@@ -74,7 +78,7 @@ const ModalImg: React.FC<PropsWithChildren<Props>> = ({ isOpen, onClose }) => {
               rowGap={2}
               flexWrap={'wrap'}
             >
-              {images.map((image, index) => {
+              {imgArr.map((image, index) => {
                 return (
                   <ImageDetail
                     key={index}

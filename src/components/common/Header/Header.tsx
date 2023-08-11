@@ -370,10 +370,23 @@ const Header = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
                   </Box>
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Đơn hàng của tôi</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      router.push('/setaddress');
+                    }}
+                  >
+                    Đơn hàng của tôi
+                  </MenuItem>
                   <MenuItem>Cài đặt địa chỉ</MenuItem>
                   <Divider></Divider>
-                  <MenuItem>Đăng xuất</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.removeItem('accessToken');
+                      window.location.reload();
+                    }}
+                  >
+                    Đăng xuất
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Box>

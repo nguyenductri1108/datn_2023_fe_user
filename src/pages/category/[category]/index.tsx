@@ -1,20 +1,42 @@
 import { Box, Divider, Heading, Select, SimpleGrid } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SORT_OPTIONS } from '..';
 import BreadCrumbFC from '../../../components/common/BreadCrumb';
 import PageWrapper from '../../../components/common/Wrapper/PageWrapper';
 import { getCategoryFromPath } from '../../../constants/category';
 import Book from '../../../components/common/Book/Book';
+import { axiosGet } from '../../../services';
 
 const SpecificCategory = () => {
   const router = useRouter();
   const [sortOptions, setSortOptions] = useState<SORT_OPTIONS | string>(
     SORT_OPTIONS.MOST_COMMON,
   );
-  console.log(router.query.category, router.query.idBook);
+  const category = router.query.category;
 
   const title = getCategoryFromPath(router.query.category).title;
+
+  const [dataBooks, setDataBooks] = useState([]);
+
+  const getBooksByCategory = async (category: string) => {
+    const res = await axiosGet('books/getbooks', {
+      category,
+    });
+    if (res.data) {
+      console.log(res.data);
+      setDataBooks(res.data);
+    }
+  };
+
+  useEffect(() => {
+    let catReq;
+    if (category) {
+      if (Array.isArray(category)) catReq = category[0];
+      else catReq = category;
+    }
+    getBooksByCategory(catReq as string);
+  }, []);
 
   return (
     <PageWrapper>
@@ -54,17 +76,9 @@ const SpecificCategory = () => {
       </Box>
       <Box mt={5}>
         <SimpleGrid columns={4} spacing={3}>
-          {Array(20)
-            .fill({
-              imgUrl: '/images/carousel/bg1.jpg',
-              description: 'Truyện tranh',
-              title: 'Doraemon',
-              price: 20_000,
-              oprice: 30000,
-            })
-            .map((item, index) => {
-              return <Book key={index} {...item}></Book>;
-            })}
+          {dataBooks.map((item: any, index) => {
+            return <Book key={index} {...item}></Book>;
+          })}
         </SimpleGrid>
       </Box>
     </PageWrapper>

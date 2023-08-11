@@ -30,6 +30,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 interface Props {
   setFocus: Dispatch<SetStateAction<boolean>>;
   isSearchFocus: boolean;
@@ -39,6 +40,7 @@ const InputSearch: React.FC<PropsWithChildren<Props>> = ({
   setFocus,
   isSearchFocus,
 }) => {
+  const router = useRouter();
   const [input, setInput] = useState<string>('');
   const { data } = useDebounce(input, 500);
 
@@ -53,6 +55,22 @@ const InputSearch: React.FC<PropsWithChildren<Props>> = ({
     console.log(res.data);
     setDataSearch(res.data);
   };
+
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log('hehe', isSearchFocus);
+    let temp: any;
+    if (isSearchFocus) setPopupVisible(true);
+    else
+      temp = setTimeout(() => {
+        setPopupVisible(false);
+      }, 200);
+
+    return () => {
+      clearTimeout(temp);
+    };
+  }, [isSearchFocus]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -93,7 +111,7 @@ const InputSearch: React.FC<PropsWithChildren<Props>> = ({
             ></IconButton>
           </InputRightElement>
 
-          {isSearchFocus ? (
+          {popupVisible ? (
             <Box
               position={'absolute'}
               style={{
@@ -117,6 +135,10 @@ const InputSearch: React.FC<PropsWithChildren<Props>> = ({
                       }}
                       padding={2}
                       key={item._id}
+                      onClick={() => {
+                        console.log('hehe');
+                        router.push(`${item._id}`);
+                      }}
                     >
                       {item.name}
                     </Box>

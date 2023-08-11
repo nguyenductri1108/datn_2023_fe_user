@@ -1,10 +1,11 @@
 import { Box, Select, SimpleGrid } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Book from '../../components/common/Book/Book';
 import BreadCrumbFC from '../../components/common/BreadCrumb';
 import PageWrapper from '../../components/common/Wrapper/PageWrapper';
 import SideBarCategory from '../../components/pages/Category/SideBar';
 import { categories } from '../../constants/category';
+import { axiosGet, axiosPost } from '../../services';
 
 const Category = () => {
   const [sortOptions, setSortOptions] = useState<SORT_OPTIONS | string>(
@@ -16,6 +17,32 @@ const Category = () => {
   const [categorySelected, setCategorySelected] = useState<
     typeof categoryPaths
   >([]);
+
+  const [dataBooks, setDataBooks] = useState<Array<any>>([]);
+
+  const getBooksFiltered = async (
+    categories: string[],
+    sortOptions: string | SORT_OPTIONS,
+  ) => {
+    console.log(categories, sortOptions);
+    axiosPost('books/filter', {
+      categories,
+      sortOptions: sortOptions.toString(),
+    })
+      .then(res => {
+        console.log(res);
+        if (res.data) {
+          setDataBooks(res.data.books);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getBooksFiltered(categorySelected, sortOptions);
+  }, [categorySelected, sortOptions]);
 
   return (
     <PageWrapper>
@@ -56,16 +83,9 @@ const Category = () => {
         </Box>
         <Box flex={4}>
           <SimpleGrid columns={4} spacing={3}>
-            {Array(20)
-              .fill({
-                imgUrl: '/images/carousel/bg1.jpg',
-                description: 'Truyện tranh',
-                title: 'Doraemon',
-                price: 20_000,
-              })
-              .map((item, index) => {
-                return <Book key={index} {...item}></Book>;
-              })}
+            {dataBooks.map((item, index) => {
+              return <Book key={index} {...item}></Book>;
+            })}
           </SimpleGrid>
         </Box>
       </Box>

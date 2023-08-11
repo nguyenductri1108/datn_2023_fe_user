@@ -52,7 +52,7 @@ const Book: React.FC<PropsWithChildren<BookProps>> = ({
         borderRadius='10px 10px 10px 10px'
         onClick={() => {
           const path = getPathFromCategory(description);
-          router.push(`/category/${path}/id`);
+          router.push(`/books/${_id}`);
         }}
         {...ContainerProps}
       >

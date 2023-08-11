@@ -35,7 +35,7 @@ const SideBarCategory: React.FC<PropsWithChildren<Props>> = ({
           <Box display={'flex'} flexDirection={'column'} rowGap={2}>
             {categories.map((item, index) => {
               return (
-                <Box>
+                <Box key={index}>
                   <Checkbox value={item.path}>{item.title}</Checkbox>
                 </Box>
               );
